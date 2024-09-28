@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Before Life Philosophy</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google Fonts for Enhanced Typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Design Your Before Life</h1>
+    <div class="instructions">
+      <p>Allocate 500 points among the following 10 parameters. Each parameter should be assigned a value between 0 and 100. Total points cannot exceed 500.</p>
+    </div>
+    
+    <!-- Remaining Points Display -->
+    <div class="remaining-points">
+      Remaining Points: <span id="remainingPoints">500</span>
+    </div>
+    
+    <!-- Optional Information -->
+    <div class="optional-info">
+      <label for="name">Name (optional):</label>
+      <input type="text" id="name" name="name" placeholder="Your Name">
+      <label for="age">Age (optional):</label>
+      <input type="number" id="age" name="age" placeholder="Your Age" min="0">
+    </div>
+  
+    <!-- Main Form -->
+    <form id="lifeParameters">
+      <!-- Parameters Sliders -->
+      <div class="parameter">
+        <label for="love">Love:</label>
+        <input type="range" id="love" name="love" min="0" max="100" value="0" aria-label="Love Slider">
+        <span id="loveValue">0%</span>
+      </div>
+      <div class="parameter">
+        <label for="wealth">Wealth:</label>
+        <input type="range" id="wealth" name="wealth" min="0" max="100" value="0" aria-label="Wealth Slider">
+        <span id="wealthValue">0%</span>
+      </div>
+      <div class="parameter">
+        <label for="health">Health:</label>
+        <input type="range" id="health" name="health" min="0" max="100" value="0" aria-label="Health Slider">
+        <span id="healthValue">0%</span>
+      </div>
+      <div class="parameter">
+        <label for="intelligence">Intelligence:</label>
+        <input type="range" id="intelligence" name="intelligence" min="0" max="100" value="0" aria-label="Intelligence Slider">
+        <span id="intelligenceValue">0%</span>
+      </div>
+      <div class="parameter">
+        <label for="creativity">Creativity:</label>
+        <input type="range" id="creativity" name="creativity" min="0" max="100" value="0" aria-label="Creativity Slider">
+        <span id="creativityValue">0%</span>
+      </div>
+      <div class="parameter">
+        <label for="beauty">Beauty:</label>
+        <input type="range" id="beauty" name="beauty" min="0" max="100" value="0" aria-label="Beauty Slider">
+        <span id="beautyValue">0%</span>
+      </div>
+      <div class="parameter">
+        <label for="social">Social Acceptance:</label>
+        <input type="range" id="social" name="social" min="0" max="100" value="0" aria-label="Social Acceptance Slider">
+        <span id="socialValue">0%</span>
+      </div>
+      <div class="parameter">
+        <label for="adventure">Adventure:</label>
+        <input type="range" id="adventure" name="adventure" min="0" max="100" value="0" aria-label="Adventure Slider">
+        <span id="adventureValue">0%</span>
+      </div>
+      <div class="parameter">
+        <label for="luck">Luck:</label>
+        <input type="range" id="luck" name="luck" min="0" max="100" value="0" aria-label="Luck Slider">
+        <span id="luckValue">0%</span>
+      </div>
+      <div class="parameter">
+        <label for="deathAge">Death Age:</label>
+        <input type="range" id="deathAge" name="deathAge" min="0" max="100" value="0" aria-label="Death Age Slider">
+        <span id="deathAgeValue">0%</span>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="buttons">
+        <button type="button" id="analyzeButton"><i class="fas fa-magic"></i> Analyze</button>
+      </div>
+
+    <!-- Analysis Summary -->
+    <div id="analysisSummary" style="display: none;">
+      <h2>Analysis Summary</h2>
+      <div id="summaryContent"></div>
+
+      
+      <div id="submitSection" style="display: none; margin-top: 40px;">
+        <p>For a more in-depth personal analysis, submit your responses:</p>
+        <button type="submit">Submit</button>
+      </div>
+
+    </form>
+    
+
+      
+
+      
+      <!-- External Link -->
+      <div class="external-link">
+        <p>Learn more about <a href="https://www.example.com/before-life-philosophy" target="_blank">Before Life Philosophy</a>.</p>
+      </div>
+    </div>
+
+
+    <!-- Submit Section -->
+
+
+            <!-- Share Prompt -->
+            <div class="share-section">
+              <p>Share your results with friends and family to understand their life opinions better!</p>
+              <button id="shareButton"><i class="fas fa-share-alt"></i> Share</button>
+            </div>  
+            
+    
+    <p class="footer"><center>The philosophy of "Before Life" delves into the concept of rebirth...</center></p>
+    
+    <!-- Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar"></div>
+    </div>
+    
+    <!-- Informational Message Box -->
+    <div id="infoMessage" class="info-message" style="display: none;">
+      <p id="infoText"></p>
+      <button id="closeInfoButton"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <div id="questionMark" style="position: fixed; bottom: 20px; right: 20px; cursor: pointer; color: #FFD700; font-size: 24px;">
+      &#63; <!-- HTML Entity for Question Mark -->
+  </div>
+  
+    <script src="script.js"></script>
+  </div>
+</body>
+</html>

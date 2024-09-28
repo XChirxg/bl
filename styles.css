@@ -1,0 +1,356 @@
+/* Importing Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+
+/* Reset Styles */
+* {
+  box-sizing: border-box;  
+  margin: 0;
+  padding: 0;
+}
+
+/* Body Styling */
+body {
+  font-family: 'Raleway', sans-serif;
+  color: #ffffff;
+  background-color: #0d0d0d;
+  background-image: radial-gradient(circle at top left, #1a1a1a, #0d0d0d);
+  overflow-x: hidden;
+}
+
+/* Container */
+.container {
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: rgba(20, 20, 20, 0.85);
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); /* Golden Glow */
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #FFD700; /* Gold Color */
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+}
+
+/* Instructions */
+.instructions {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+  color: #f0f0f0;
+}
+
+/* Remaining Points */
+.remaining-points {
+  font-size: 1.1em;
+  margin-bottom: 20px;
+  color: #FFD700;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+/* Optional Information */
+.optional-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.optional-info label {
+  margin: 10px;
+  font-weight: bold;
+}
+
+.optional-info input {
+  padding: 10px;
+  margin: 10px;
+  border: 2px solid #FFD700;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 150px;
+}
+
+.optional-info input:focus {
+  border-color: #FFA500;
+  box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+}
+
+/* Parameters Sliders */
+.parameter {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.parameter label {
+  width: 180px;
+  text-align: right;
+  margin-right: 20px;
+  font-weight: 700;
+  color: #FFD700;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+.parameter input[type="range"] {
+  -webkit-appearance: none;
+  width: 50%;
+  height: 4px; /* Reduced height */
+  border-radius: 10px; /* Rounded corners */
+  background: #444; /* Non-filled part */
+  outline: none;
+  transition: background 0.3s ease;
+  position: relative;
+  z-index: 2;
+  background-image: linear-gradient(to right, #FFD700 0%, #FFD700 var(--value), #444 var(--value), #444 100%);
+}
+
+.parameter input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px; /* Smaller thumb size */
+  height: 20px;
+  border-radius: 50%;
+  background: #FFD700;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+.parameter input[type="range"]::-moz-range-thumb {
+  width: 20px; /* Smaller thumb size */
+  height: 20px;
+  border-radius: 50%;
+  background: #FFD700;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+/* Filled Portion of Slider */
+.parameter input[type="range"] {
+  --value: 0%;
+}
+
+/* Span */
+.parameter span {
+  width: 60px;
+  text-align: left;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+/* Buttons */
+.buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+button {
+  padding: 3px 3px;
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  border: none;
+  border-radius: 50px;
+  color: #1a1a1a;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+}
+
+#submitSection {
+  text-align: center;
+  margin-top: 40px;
+}
+
+#submitSection p {
+  font-size: 1.2em;
+  margin-bottom: 15px;
+  color: #FFD700;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+#submitSection button {
+  background: linear-gradient(45deg, #FFD700, #FF8C00);
+}
+
+/* Analysis Summary */
+#analysisSummary {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: rgba(50, 50, 50, 0.8);
+  border-radius: 10px;
+}
+
+#analysisSummary h2 {
+  color: #FFD700;
+  margin-bottom: 15px;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+#summaryContent {
+  font-size: 1.1em;
+  color: #f0f0f0;
+}
+
+/* Share Section */
+.share-section {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.share-section p {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  color: #f0f0f0;
+}
+
+.share-section button {
+  background: linear-gradient(45deg, #868686, #ffa6003e);
+}
+
+/* External Link */
+.external-link {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.external-link a {
+  color: #FFA500;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.external-link a:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+  margin-top: 50px;
+  font-size: 1em;
+  color: #888;
+  text-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  height: 20px;
+}
+
+.progress-bar {
+  width: 0;
+  height: 100%;
+  background-color: #FFD700;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.progress-bar.exceed {
+  background-color: #FF4500;
+}
+
+/* Informational Message Box */
+.info-message {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%; /* Cover the whole width */
+  background-color: rgba(30, 30, 30, 0.95);
+  color: #FFD700;
+  padding: 10px 20px; /* Reduced height */
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-message p {
+  margin: 0;
+  font-size: 0.9em; /* Smaller font size */
+}
+
+/* Close Button */
+#closeInfoButton {
+  background: none;
+  border: none;
+  color: #FFD700;
+  font-size: 1em; /* Smaller size */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+#closeInfoButton:hover {
+  color: #FFA500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .parameter {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .parameter label {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .parameter input[type="range"] {
+    width: 90%; /* Adjusted width for mobile */
+  }
+
+  h1 {
+    font-size: 2em; /* Smaller size for mobile */
+  }
+
+  .instructions,
+  .remaining-points {
+    font-size: 1em; /* Smaller size for mobile */
+  }
+
+  button {
+    width: 90%; /* Full width for buttons on mobile */
+  }
+
+  #closeInfoButton {
+    background: none;
+    border: none;
+    color: #FFD700;
+    font-size: 1em; /* Smaller size */
+    cursor: pointer;
+    transition: color 0.3s ease;
+    margin-bottom: 80px;
+  }
+
+  #analysisSummary {
+    padding: 15px; /* Reduced padding */
+  }
+
+  .optional-info input {
+    width: 80%; /* Reduced width for input fields on mobile */
+  }
+
+  .info-message p {
+    font-size: 0.8em; /* Smaller font size for mobile */
+  }
+}
