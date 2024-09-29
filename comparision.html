@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLPhi Code Comparison</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>BLPhi Code Comparison</h1>
+        <p class="instructions">Enter the BLPhi code of up to 5 people to compare life parameters. Share the link with your friends!</p>
+        
+        <form id="blphiForm">
+            <div class="optional-info">
+                <label for="name1">Name (optional):</label>
+                <input type="text" id="name1" placeholder="Your Name">
+                <input type="text" id="code1" placeholder="Your BLPhi Code">
+            </div>
+
+            <div class="optional-info">
+                <label for="name2">Name (optional):</label>
+                <input type="text" id="name2" placeholder="Friend's Name">
+                <input type="text" id="code2" placeholder="Friend's BLPhi Code">
+            </div>
+
+            <div class="optional-info">
+                <label for="name3">Name (optional):</label>
+                <input type="text" id="name3" placeholder="Friend's Name">
+                <input type="text" id="code3" placeholder="Friend's BLPhi Code">
+            </div>
+
+            <div class="optional-info">
+                <label for="name4">Name (optional):</label>
+                <input type="text" id="name4" placeholder="Friend's Name">
+                <input type="text" id="code4" placeholder="Friend's BLPhi Code">
+            </div>
+
+            <div class="optional-info">
+                <label for="name5">Name (optional):</label>
+                <input type="text" id="name5" placeholder="Friend's Name">
+                <input type="text" id="code5" placeholder="Friend's BLPhi Code">
+            </div>
+
+            <div class="buttons">
+                <button type="button" onclick="compareBLPhiCodes()">Compare BLPhi Codes</button>
+            </div>
+        </form>
+
+        <div id="result"></div>
+
+        <div class="footer">
+            <p>BLPhi Code Comparison</p>
+        </div>
+    </div>
+
+    <script src="comparision.js"></script>
+</body>
+</html>
