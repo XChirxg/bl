@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About BLPhi - Before Life Philosophy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Importing Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+
+    /* Reset Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Body Styling */
+    body {
+      font-family: 'Raleway', sans-serif;
+      color: #ffffff;
+      background-color: #0d0d0d;
+      background-image: radial-gradient(circle at top left, #1a1a1a, #0d0d0d);
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: rgba(20, 20, 20, 0.85);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); /* Golden Glow */
+      position: relative;
+    }
+
+    /* Header */
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #FFD700; /* Gold Color */
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+      text-align: center;
+    }
+
+    /* Read Aloud Section */
+    .read-aloud {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+      color: #f0f0f0;
+    }
+
+    .read-aloud button {
+      background: none;
+      border: none;
+      color: #FFD700;
+      font-size: 2em;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: color 0.3s ease;
+    }
+
+    .read-aloud button:hover {
+      color: #FFA500;
+    }
+
+    /* About Content */
+    .about-content {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      line-height: 1.6;
+      color: #f0f0f0;
+    }
+
+    .about-content h2 {
+      color: #FFD700;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+
+    .about-content ul {
+      list-style-type: disc;
+      margin-left: 40px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    .about-content ul li {
+      margin-bottom: 5px;
+    }
+
+    /* Author Section */
+    .author {
+      display: flex;
+      align-items: center;
+      margin-top: 50px;
+      font-size: 1.1em;
+      color: #f0f0f0;
+    }
+
+    .author img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-right: 20px;
+      border: 3px solid #FFD700;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    }
+
+    .author-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .author-info p {
+      margin-bottom: 5px;
+    }
+
+    /* Links Section */
+    .links-section {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .links-section a {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 30px;
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      border-radius: 50px;
+      text-decoration: none;
+      color: #1a1a1a;
+      font-weight: bold;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .links-section a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 50px;
+      font-size: 1em;
+      color: #888;
+      text-align: center;
+      text-shadow: 0 0 3px rgba(0,0,0,0.5);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .author {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .author img {
+        margin-bottom: 15px;
+      }
+
+      .links-section a {
+        width: 80%;
+        margin: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <h1>Before Life Philosophy (BLPhi): A Path to Understanding Life’s Design</h1>
+
+    <!-- Read Aloud Section -->
+    <div class="read-aloud">
+      <button id="playAudio" aria-label="Play Read Aloud">
+        🔊
+      </button>
+      <p>Click the icon to listen to this page.</p>
+    </div>
+
+    <!-- Audio Element (Hidden) -->
+    <audio id="audio" src="audio/BLPhi-About.mp3"></audio>
+
+    <!-- About Content -->
+    <div class="about-content">
+      <p>Imagine a world where your life is not a random occurrence, but a series of deliberate choices you made before birth. Every aspect of your existence—your joys, struggles, relationships, and challenges—was selected with purpose, and you will do the same for your next life once this one ends. This is the foundation of the <em>Before Life Philosophy</em> (BLPhi), a framework for understanding life’s deeper meaning through a unique lens.</p>
+      
+      <h2>The BLPhi Test: A Tool for Self-Reflection</h2>
+      <p>The BLPhi philosophy introduces a test that helps you explore the choices you might have made before you were born. It guides you in thinking about the life you may have decided for yourself and offers a glimpse into what might be the best path for your future reincarnation. The test revolves around <strong>10 core parameters of life</strong>, and although we have no control over them once we're born, their balance defines who we are and what we experience. These parameters are:</p>
+      <ul>
+        <li><strong>Love</strong></li>
+        <li><strong>Wealth</strong></li>
+        <li><strong>Health</strong></li>
+        <li><strong>Intelligence</strong></li>
+        <li><strong>Creativity</strong></li>
+        <li><strong>Beauty</strong></li>
+        <li><strong>Social Acceptance</strong></li>
+        <li><strong>Adventure</strong></li>
+        <li><strong>Luck</strong></li>
+        <li><strong>Death Age</strong></li>
+      </ul>
+      <p>Each parameter holds a possible score from 0 to 100. However, in life, balance is key. We cannot excel in every area, and that is life’s great equalizer—everyone has only <strong>500 points to allocate across all parameters</strong>, even though the sum of possible maximums is 1000. This forces us to make decisions, mirroring how life itself is full of trade-offs. One person might prioritize <strong>health</strong> with 80 points, leaving less room for <strong>wealth</strong>, while another might choose a long life, but at the cost of social acceptance or luck.</p>
+
+      <h2>The Balance of Life: The Role of Good Deeds</h2>
+      <p>Life, as BLPhi suggests, is governed by a fundamental law: we don’t have everything, and we can’t control everything. However, the philosophy also introduces the concept of <strong>karma</strong>, or the effect of good and bad deeds on our future lives. By performing good actions—anything that positively impacts people, animals, plants, and even the environment—the 500-point limit might be surpassed in future lives. This means that acts of kindness, empathy, and a mindful, positive existence can improve not just the quality of this life but the next one as well. Conversely, negative actions—those that harm others or the natural world—can reduce your potential in the next life.</p>
+      <p>But since no test can definitively determine whether a person is inherently “good” or “bad,” the BLPhi test sets 500 points as a neutral starting place for everyone. How you live your life from that point on is your opportunity to improve the balance in future incarnations.</p>
+
+      <h2>A Mirror of Humanity: Understanding Yourself and Others</h2>
+      <p>BLPhi is not just a tool for individual self-reflection but also a way to understand humanity. By comparing your scores with those of others who take the test, you gain insight into how your values align with or differ from the collective mindset. For instance, one individual might rate <strong>health</strong> at 60, thinking that’s a reasonable score. But by reviewing the test data, they might discover that most people prioritize health with scores closer to 80 or 90. This doesn’t make their perspective wrong; it merely offers a point of reflection—perhaps they value adventure or creativity more than longevity, or they have faith that luck will fill the gaps in other areas.</p>
+      <p>This social comparison aspect can be eye-opening. It helps you realize how your choices shape your experiences, while also showing you how your preferences stack up against others’ life philosophies.</p>
+
+      <h2>Acceptance in the Face of Struggles: Life is What You Chose</h2>
+      <p>One of the most empowering aspects of BLPhi is the sense of acceptance it fosters during difficult times. According to this philosophy, everything that happens to you in life—both the good and the bad—is the result of choices you made before you were born. If you are facing challenges, it’s because you believed these struggles would help you grow, learn, or achieve something greater. This doesn’t mean life always makes sense in the moment, but BLPhi encourages you to trust that your choices were made with long-term fulfillment in mind. And if certain aspects of your current life don’t seem to align with your happiness, it might simply be a result of misjudging the balance—something to correct in your next life.</p>
+
+      <h2>The Cycle of Life: The Role of the Universe and God</h2>
+      <p>This philosophy extends beyond the individual to encompass a grander, cosmic cycle. The universe, or <strong>God</strong>, is not micromanaging your life, rewarding or punishing you for specific actions. Instead, the divine force has provided you with the freedom to design your own life. You are empowered to make decisions, guided only by the gentle, timeless wisdom that manifests in many forms throughout history—whether through religious teachings, philosophical principles, or the quiet intuition that nudges you in certain directions.</p>
+      <p>In BLPhi, prayer is viewed not as a transaction—asking God to fix your problems in exchange for devotion—but as a form of deep, personal reflection. Like talking with a trusted friend, you share your experiences with God, knowing that there’s no expectation for intervention. This openness to dialogue without the demand for answers fosters a peaceful, respectful relationship with the divine. It’s about embracing life with all its uncertainties, knowing that, in the grand scheme of things, you made the choices that led you here.</p>
+
+      <h2>Living with Purpose: What BLPhi Offers You</h2>
+      <p>At its heart, BLPhi is about empowerment, self-awareness, and purposeful living. It offers a perspective that is at once freeing and responsible. Freeing because it acknowledges that you have more control over your life than you may think. Responsible because it reminds you that your actions today shape not only your future but the futures of others and the world around you.</p>
+      <p>Even if the idea of choosing your life before birth seems far-fetched, this philosophy serves as a metaphor for understanding your values, your goals, and your actions. It encourages you to reflect on what truly matters to you, where you are placing your points, and whether those choices are creating the life you desire. And if things are not where you want them to be, BLPhi gives you the hope and inspiration to change, not only for this life but for the many lives that may follow.</p>
+      <p>In times of uncertainty or hardship, BLPhi reminds you to trust the process of life. Everything happening now is part of a grand design that you shaped for yourself. And with each step, each decision, you are moving closer to understanding what you truly need to create the most fulfilling, balanced life possible.</p>
+      <p>So, take the test. Look inward. Reflect. And remember that life, in all its complexity, is a creation of your own making—a beautiful, evolving, eternal journey.</p>
+    </div>
+
+    <!-- Author Section -->
+    <div class="author">
+      <img src="chiragsharma.jpg" alt="Chirag Sharma">
+      <div class="author-info">
+        <p><strong>Chirag Sharma</strong></p>
+        <p>Philosopher & Creator of BLPhi</p>
+      </div>
+    </div>
+
+    <!-- Links Section -->
+    <div class="links-section">
+      <a href="responses.html">Other People’s Responses</a>
+      <a href="index.html">Give Test</a>
+      <a href="compare-friend.html">Compare with Friend</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>&copy; 2024 BLPhi. All rights reserved.</p>
+  </div>
+
+  <!-- JavaScript for Play/Pause Audio -->
+  <script>
+    const playAudioBtn = document.getElementById('playAudio');
+    const audio = document.getElementById('audio');
+    let isPlaying = false;
+
+    playAudioBtn.addEventListener('click', function () {
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        playAudioBtn.textContent = '🔊';
+        playAudioBtn.setAttribute('aria-label', 'Play Read Aloud');
+      } else {
+        audio.play();
+        isPlaying = true;
+        playAudioBtn.textContent = '⏸️';
+        playAudioBtn.setAttribute('aria-label', 'Pause Read Aloud');
+      }
+    });
+
+    audio.addEventListener('ended', function () {
+      isPlaying = false;
+      playAudioBtn.textContent = '🔊';
+      playAudioBtn.setAttribute('aria-label', 'Play Read Aloud');
+    });
+  </script>
+
+</body>
+</html>
