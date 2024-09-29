@@ -15,7 +15,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const infoText = document.getElementById('infoText');
   const closeInfoButton = document.getElementById('closeInfoButton');
   
-  
+  // Analysis Summary Elements
+  const analyzeButton = document.getElementById('analyzeButton');
+  const submitSection = document.getElementById('submitSection');
+  const analysisSummary = document.getElementById('analysisSummary');
+  const summaryContent = document.getElementById('summaryContent');
+  const shareButton = document.getElementById('shareButton');
+
   // Initialize Display Values
   updateValues();
   updateProgressBar();
@@ -109,6 +115,50 @@ document.addEventListener('DOMContentLoaded', function() {
     return message;
   }
 
+  // Mapping function for parameter values to categories
+  function mapValueToCategory(value) {
+    if (value <= 19) return 1;
+    if (value <= 39) return 2;
+    if (value <= 59) return 3;
+    if (value <= 79) return 4;
+    return 5;
+  }
+
+  // Function to generate codes
+  function generateCodes() {
+    const values = Array.from(sliders).map(slider => parseInt(slider.value));
+    const categories = values.map(mapValueToCategory); // Array of categories [1,2,3,...]
+    
+    // Create initial code string (e.g., "3333333333")
+    const initialCode = categories.join('');
+    
+    // Group into pairs (e.g., ["33", "33", "33", "33", "33"])
+    const pairedCodes = [];
+    for (let i = 0; i < initialCode.length; i += 2) {
+      const pair = initialCode.slice(i, i + 2);
+      pairedCodes.push(pair);
+    }
+    
+    // Function to map a pair to a character
+    function mapPairToChar(pair) {
+      const num = parseInt(pair);
+      if (num >= 0 && num <= 25) {
+        return String.fromCharCode(97 + num); // 'a' to 'z'
+      } else if (num >= 26 && num <= 51) {
+        return String.fromCharCode(65 + (num - 26)); // 'A' to 'Z'
+      } else if (num >= 52 && num <= 55) {
+        return (num - 52).toString(); // '0' to '3'
+      } else {
+        return '?'; // For any out-of-range values
+      }
+    }
+    
+    // Generate shortened code
+    const shortenedCode = pairedCodes.map(mapPairToChar).join('');
+    
+    return { initialCode, shortenedCode };
+  }
+
   // Display Informational Message Box
   function showInfoMessage(label, value) {
     const presence = value > 0 ? "presence" : "absence";
@@ -187,6 +237,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const deathAgeValue = values[parameterLabels.indexOf('Death Age')];
     const deathAgeMessage = `You expect to live until ${deathAgeValue} years old. 🎉 Better make those years count!`;
 
+    // Generate codes
+    const { initialCode, shortenedCode } = generateCodes();
+
     // Email body content (Plain Text)
     let emailBody = `Before Life Response Sheet\n\n`;
     emailBody += `Hey, I am ${name}, and I am ${age} years old. These are my opinions about life.\n\n`;
@@ -207,6 +260,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     emailBody += `\n---\n`;
 
+    emailBody += `Generated Codes:\n`;
+    emailBody += `Initial Code: ${initialCode}\n`;
+    emailBody += `Shortened Code: ${shortenedCode}\n\n`;
+
+    emailBody += `---\n`;
+
     emailBody += `Copyable Data for Excel:\n`;
     emailBody += `Name, Age, ${parameterLabels.join(', ')}\n`;
     emailBody += `${name}, ${age}, ${values.join(', ')}\n\n`;
@@ -219,12 +278,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Analyze Button
-  const analyzeButton = document.getElementById('analyzeButton');
-  const submitSection = document.getElementById('submitSection');
-  const analysisSummary = document.getElementById('analysisSummary');
-  const summaryContent = document.getElementById('summaryContent');
-  const shareButton = document.getElementById('shareButton');
-
   analyzeButton.addEventListener('click', function() {
     generateAnalysisSummary();
 
@@ -238,8 +291,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const name = document.getElementById('name').value || 'Anonymous';
     const age = document.getElementById('age').value || 'Unknown';
 
-    // Collect parameter values
+    // Collect parameter values and map to categories
     const values = Array.from(sliders).map(slider => parseInt(slider.value));
+    const categories = values.map(mapValueToCategory); // Array of categories [1,2,3,...]
 
     // Sort parameters based on values, excluding Death Age
     const sortedParameters = parameterLabels
@@ -254,6 +308,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Death Age value and special message
     const deathAgeValue = values[parameterLabels.indexOf('Death Age')];
     const deathAgeMessage = `You expect to live until ${deathAgeValue} years old. 🎉 Better make those years count!`;
+
+    // Generate codes
+    const { initialCode, shortenedCode } = generateCodes();
 
     // Populate Analysis Summary
     let summaryHTML = `
@@ -276,56 +333,65 @@ document.addEventListener('DOMContentLoaded', function() {
       </ul>
       <h3>Death Age:</h3>
       <p>${deathAgeMessage}</p>
+      <h3>Generated Codes:</h3>
+      <p><strong>Initial Code:</strong> ${initialCode}</p>
+      <p><strong>Shortened Code:</strong> ${shortenedCode}</p>
     `;
 
     summaryContent.innerHTML = summaryHTML;
     analysisSummary.style.display = 'block'; // Show analysis summary
   }
 
-// Share Button Functionality
-shareButton.addEventListener('click', function() {
-  const shareURL = window.location.href;
+  // Share Button Functionality
+  shareButton.addEventListener('click', function() {
+    // Generate codes to include in sharing
+    const { shortenedCode } = generateCodes();
+    
+    const shareURL = window.location.href;
 
-  // Example preferences (these should be dynamically generated based on user input)
-  const topPreferences = ['🌍 Adventure', '📚 Knowledge', '💖 Love'];
-  const leastFavorite = '🕰️ Time Wasting';
-  
-  const shareText = encodeURIComponent(`I've taken the Before Life Philosophy test! Here are my top 3 priorities in life: ${topPreferences.join(', ')} and my least favorite: ${leastFavorite}. What about you? Take the test and find out!`);
+    // Example preferences based on top and least important parameters
+    const topPreferences = [
+      sortedParameters[0]?.label || 'Parameter1',
+      sortedParameters[1]?.label || 'Parameter2',
+      sortedParameters[2]?.label || 'Parameter3'
+    ];
+    const leastFavorite = sortedParameters[sortedParameters.length - 1]?.label || 'Parameter10';
+    
+    const shareText = encodeURIComponent(`I've taken the Before Life Philosophy test! Here are my top 3 priorities in life: ${topPreferences.join(', ')} and my least favorite: ${leastFavorite}. My code: ${shortenedCode}. What about you? Take the test and find out!`);
 
-  // Sharing URLs
-  const twitterURL = `https://twitter.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(shareURL)}`;
-  const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareURL)}`;
-  const whatsappURL = `https://api.whatsapp.com/send?text=${shareText} ${encodeURIComponent(shareURL)}`;
-  const telegramURL = `https://t.me/share/url?url=${encodeURIComponent(shareURL)}&text=${shareText}`;
-  const instagramURL = `https://www.instagram.com/?url=${encodeURIComponent(shareURL)}`;
-  const gmailURL = `mailto:?subject=Check%20out%20this%20test!&body=${shareText}%20${encodeURIComponent(shareURL)}`;
-  const discordURL = `https://discord.com/share?url=${encodeURIComponent(shareURL)}&text=${shareText}`;
-  const redditURL = `https://www.reddit.com/submit?url=${encodeURIComponent(shareURL)}&title=${shareText}`;
+    // Sharing URLs
+    const twitterURL = `https://twitter.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(shareURL)}`;
+    const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareURL)}`;
+    const whatsappURL = `https://api.whatsapp.com/send?text=${shareText}%20${encodeURIComponent(shareURL)}`;
+    const telegramURL = `https://t.me/share/url?url=${encodeURIComponent(shareURL)}&text=${shareText}`;
+    const gmailURL = `mailto:?subject=Check%20out%20this%20test!&body=${shareText}%20${encodeURIComponent(shareURL)}`;
+    const discordURL = `https://discord.com/share?url=${encodeURIComponent(shareURL)}&text=${shareText}`;
+    const redditURL = `https://www.reddit.com/submit?url=${encodeURIComponent(shareURL)}&title=${shareText}`;
 
-  // Create a popup window for sharing
-  const popup = window.open('', 'Share', 'width=600,height=600');
-  popup.document.write(`
-      <html>
-          <head><title>Share Your Results</title></head>
-          <body style="background-color: #1a1a1a; color: #fff; font-family: 'Raleway', sans-serif; text-align: center; padding: 50px;">
-              <h2>Share Your Before Life Philosophy Results</h2>
-              <p>I've taken the Before Life Philosophy test! Here are my top 3 priorities in life: ${topPreferences.join(', ')} and my least favorite: ${leastFavorite}. What about you? 🤔</p>
-              <p>Encourage your friends to take the test too!</p>
-              <p style="font-weight: bold;">Choose a platform to share:</p>
-              <a href="${twitterURL}" target="_blank" style="margin: 100px; padding: 10px 20px; background-color: #1DA1F2; color: #fff; text-decoration: none; border-radius: 50px;">Twitter</a><br><hr>
-              <a href="${facebookURL}" target="_blank" style="margin: 100px; padding: 10px 20px; background-color: #3b5998; color: #fff; text-decoration: none; border-radius: 50px;">Facebook</a><br><hr>
-              <a href="${whatsappURL}" target="_blank" style="margin: 100px; padding: 10px 20px; background-color: #25D366; color: #fff; text-decoration: none; border-radius: 50px;">WhatsApp</a><br><hr>
-              <a href="${telegramURL}" target="_blank" style="margin: 100px; padding: 10px 20px; background-color: #0088cc; color: #fff; text-decoration: none; border-radius: 50px;">Telegram</a><br><hr>
-              <a href="${gmailURL}" target="_blank" style="margin: 100px; padding: 10px 20px; background-color: #D44638; color: #fff; text-decoration: none; border-radius: 50px;">Gmail</a><br><hr>
-              <a href="${discordURL}" target="_blank" style="margin: 100px; padding: 10px 20px; background-color: #7289DA; color: #fff; text-decoration: none; border-radius: 50px;">Discord</a><br><hr>
-              <a href="${redditURL}" target="_blank" style="margin: 100px; padding: 10px 20px; background-color: #FF4500; color: #fff; text-decoration: none; border-radius: 50px;">Reddit</a><br><hr>
-              <br><br>
-              <p style="font-weight: bold;">🔗 Visit: <a href="${shareURL}" style="color: #FFD700;">${shareURL}</a></p>
-              <button onclick="window.close()" style="padding: 10px 20px; background-color: #FFD700; border: none; border-radius: 5px; cursor: pointer;">Close</button>
-          </body>
-      </html>
-  `);
-});
+    // Create a popup window for sharing
+    const popup = window.open('', 'Share', 'width=600,height=600');
+    popup.document.write(`
+        <html>
+            <head><title>Share Your Results</title></head>
+            <body style="background-color: #1a1a1a; color: #fff; font-family: 'Raleway', sans-serif; text-align: center; padding: 50px;">
+                <h2>Share Your Before Life Philosophy Results</h2>
+                <p>I've taken the Before Life Philosophy test! Here are my top 3 priorities in life: ${topPreferences.join(', ')} and my least favorite: ${leastFavorite}. My code: ${shortenedCode}. What about you? 🤔</p>
+                <p>Encourage your friends to take the test too!</p>
+                <p style="font-weight: bold;">Choose a platform to share:</p>
+                <a href="${twitterURL}" target="_blank" style="margin: 20px; padding: 10px 20px; background-color: #1DA1F2; color: #fff; text-decoration: none; border-radius: 50px;">Twitter</a><br><hr>
+                <a href="${facebookURL}" target="_blank" style="margin: 20px; padding: 10px 20px; background-color: #3b5998; color: #fff; text-decoration: none; border-radius: 50px;">Facebook</a><br><hr>
+                <a href="${whatsappURL}" target="_blank" style="margin: 20px; padding: 10px 20px; background-color: #25D366; color: #fff; text-decoration: none; border-radius: 50px;">WhatsApp</a><br><hr>
+                <a href="${telegramURL}" target="_blank" style="margin: 20px; padding: 10px 20px; background-color: #0088cc; color: #fff; text-decoration: none; border-radius: 50px;">Telegram</a><br><hr>
+                <a href="${gmailURL}" target="_blank" style="margin: 20px; padding: 10px 20px; background-color: #D44638; color: #fff; text-decoration: none; border-radius: 50px;">Gmail</a><br><hr>
+                <a href="${discordURL}" target="_blank" style="margin: 20px; padding: 10px 20px; background-color: #7289DA; color: #fff; text-decoration: none; border-radius: 50px;">Discord</a><br><hr>
+                <a href="${redditURL}" target="_blank" style="margin: 20px; padding: 10px 20px; background-color: #FF4500; color: #fff; text-decoration: none; border-radius: 50px;">Reddit</a><br><hr>
+                <br><br>
+                <p style="font-weight: bold;">🔗 Visit: <a href="${shareURL}" style="color: #FFD700;">${shareURL}</a></p>
+                <button onclick="window.close()" style="padding: 10px 20px; background-color: #FFD700; border: none; border-radius: 5px; cursor: pointer;">Close</button>
+            </body>
+        </html>
+    `);
+  });
 
   // Data Persistence (Optional Enhancement)
   // Save data on input
@@ -352,9 +418,8 @@ shareButton.addEventListener('click', function() {
     updateValues();
     updateProgressBar();
   }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
+  
+  // Info Message Box and Question Mark interactions
   const infoMessage = document.getElementById('infoMessage');
   const closeButton = document.getElementById('closeInfoButton');
   const questionMark = document.getElementById('questionMark');
@@ -388,5 +453,3 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   });
 });
-
-
