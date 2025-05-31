@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribution Analysis Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .distribution-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 2px solid #e8f4fd;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .distribution-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .field-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .skewness-info {
+            text-align: center;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .right-skewed { background: linear-gradient(135deg, #fd79a8, #e84393); color: white; }
+        .left-skewed { background: linear-gradient(135deg, #55a3ff, #3742fa); color: white; }
+        .symmetric { background: linear-gradient(135deg, #00b894, #00a085); color: white; }
+        
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        .axis {
+            font-size: 12px;
+        }
+        
+        .axis-label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .distribution-curve {
+            fill: none;
+            stroke: #e17055;
+            stroke-width: 3;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        .histogram-bar {
+            fill: rgba(116, 185, 255, 0.7);
+            stroke: #74b9ff;
+            stroke-width: 1;
+        }
+        
+        .mean-line {
+            stroke: #d63031;
+            stroke-width: 2;
+            stroke-dasharray: 5,5;
+        }
+        
+        .median-line {
+            stroke: #00b894;
+            stroke-width: 2;
+            stroke-dasharray: 3,3;
+        }
+        
+        .legend {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Distribution Analysis Dashboard</h1>
+        <p style="text-align: center; font-size: 1.2em; color: #666; margin-bottom: 30px;">
+            Analyzing the distribution patterns of 10 attributes across 17 individuals
+        </p>
+        <div class="stats-grid" id="statsGrid"></div>
+    </div>
+    
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        const data = [
+            {"Name": "Akanksha", "Age": 23, "Gender": "Female", "Love": 60, "Wealth": 60, "Health": 70, "Intelligence": 65, "Creativity": 68, "Beauty": 0, "Social Acceptance": 0, "Adventure": 60, "Luck": 57, "Death Age": 60},
+            {"Name": "Puja", "Age": 23, "Gender": "Female", "Love": 50, "Wealth": 50, "Health": 85, "Intelligence": 40, "Creativity": 65, "Beauty": 20, "Social Acceptance": 45, "Adventure": 55, "Luck": 35, "Death Age": 55},
+            {"Name": "Dangar Rohan Aapabhai", "Age": 23, "Gender": "Male", "Love": 49, "Wealth": 32, "Health": 53, "Intelligence": 66, "Creativity": 12, "Beauty": 45, "Social Acceptance": 62, "Adventure": 47, "Luck": 59, "Death Age": 75},
+            {"Name": "Ankush", "Age": 23, "Gender": "Male", "Love": 64, "Wealth": 74, "Health": 85, "Intelligence": 65, "Creativity": 59, "Beauty": 77, "Social Acceptance": 20, "Adventure": 13, "Luck": 18, "Death Age": 25},
+            {"Name": "Pallvi", "Age": 23, "Gender": "Female", "Love": 15, "Wealth": 23, "Health": 100, "Intelligence": 46, "Creativity": 42, "Beauty": 11, "Social Acceptance": 54, "Adventure": 49, "Luck": 100, "Death Age": 60},
+            {"Name": "Harsh Vardhan", "Age": 57, "Gender": "Male", "Love": 75, "Wealth": 50, "Health": 80, "Intelligence": 60, "Creativity": 40, "Beauty": 30, "Social Acceptance": 50, "Adventure": 20, "Luck": 25, "Death Age": 70},
+            {"Name": "Divya Sharma", "Age": 27, "Gender": "Female", "Love": 62, "Wealth": 42, "Health": 34, "Intelligence": 63, "Creativity": 70, "Beauty": 44, "Social Acceptance": 48, "Adventure": 55, "Luck": 61, "Death Age": 21},
+            {"Name": "Shikha Sharma", "Age": 24, "Gender": "Female", "Love": 100, "Wealth": 39, "Health": 100, "Intelligence": 50, "Creativity": 75, "Beauty": 20, "Social Acceptance": 30, "Adventure": 50, "Luck": 10, "Death Age": 44},
+            {"Name": "Jyoti", "Age": 27, "Gender": "Female", "Love": 53, "Wealth": 86, "Health": 78, "Intelligence": 68, "Creativity": 9, "Beauty": 33, "Social Acceptance": 19, "Adventure": 1, "Luck": 80, "Death Age": 73},
+            {"Name": "Deepak Sharma", "Age": 25, "Gender": "Male", "Love": 0, "Wealth": 100, "Health": 100, "Intelligence": 87, "Creativity": 47, "Beauty": 0, "Social Acceptance": 0, "Adventure": 0, "Luck": 96, "Death Age": 70},
+            {"Name": "Subhadra Sharma", "Age": 53, "Gender": "Female", "Love": 10, "Wealth": 80, "Health": 85, "Intelligence": 90, "Creativity": 40, "Beauty": 31, "Social Acceptance": 45, "Adventure": 10, "Luck": 25, "Death Age": 84},
+            {"Name": "Praveen Shukla", "Age": 23, "Gender": "Male", "Love": 80, "Wealth": 60, "Health": 80, "Intelligence": 60, "Creativity": 40, "Beauty": 38, "Social Acceptance": 35, "Adventure": 80, "Luck": 5, "Death Age": 58},
+            {"Name": "Sapna Tyagi", "Age": 23, "Gender": "Female", "Love": 50, "Wealth": 50, "Health": 50, "Intelligence": 50, "Creativity": 50, "Beauty": 36, "Social Acceptance": 49, "Adventure": 50, "Luck": 50, "Death Age": 65},
+            {"Name": "RISHABH SHARMA", "Age": 23, "Gender": "Male", "Love": 30, "Wealth": 70, "Health": 51, "Intelligence": 50, "Creativity": 53, "Beauty": 48, "Social Acceptance": 33, "Adventure": 48, "Luck": 37, "Death Age": 80},
+            {"Name": "Ayush Shurveer", "Age": 23, "Gender": "Male", "Love": 57, "Wealth": 50, "Health": 50, "Intelligence": 65, "Creativity": 22, "Beauty": 26, "Social Acceptance": 0, "Adventure": 86, "Luck": 68, "Death Age": 76},
+            {"Name": "Archita Mehta", "Age": 23, "Gender": "Female", "Love": 67, "Wealth": 37, "Health": 64, "Intelligence": 53, "Creativity": 62, "Beauty": 38, "Social Acceptance": 31, "Adventure": 37, "Luck": 45, "Death Age": 66},
+            {"Name": "Chirag Sharma", "Age": 23, "Gender": "Male", "Love": 60, "Wealth": 62, "Health": 61, "Intelligence": 44, "Creativity": 100, "Beauty": 33, "Social Acceptance": 18, "Adventure": 29, "Luck": 19, "Death Age": 71}
+        ];
+
+        const fields = ['Love', 'Wealth', 'Health', 'Intelligence', 'Creativity', 'Beauty', 'Social Acceptance', 'Adventure', 'Luck', 'Death Age'];
+        
+        // Statistics calculation functions
+        function calculateStats(values) {
+            const sorted = values.slice().sort((a, b) => a - b);
+            const n = values.length;
+            const mean = values.reduce((a, b) => a + b) / n;
+            const median = n % 2 === 0 ? (sorted[n/2 - 1] + sorted[n/2]) / 2 : sorted[Math.floor(n/2)];
+            const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / n;
+            const stdDev = Math.sqrt(variance);
+            
+            // Skewness calculation
+            const skewness = values.reduce((sum, val) => sum + Math.pow((val - mean) / stdDev, 3), 0) / n;
+            
+            return {
+                mean: mean.toFixed(2),
+                median: median.toFixed(2),
+                stdDev: stdDev.toFixed(2),
+                skewness: skewness.toFixed(3),
+                min: Math.min(...values),
+                max: Math.max(...values)
+            };
+        }
+        
+        function getSkewnessType(skewness) {
+            if (skewness > 0.5) return { type: 'right-skewed', text: 'Right Skewed (Positive)', description: 'Tail extends to the right' };
+            if (skewness < -0.5) return { type: 'left-skewed', text: 'Left Skewed (Negative)', description: 'Tail extends to the left' };
+            return { type: 'symmetric', text: 'Approximately Symmetric', description: 'Balanced distribution' };
+        }
+        
+        // Kernel Density Estimation for smooth curves
+        function kernelDensityEstimator(kernel, X) {
+            return function(V) {
+                return X.map(function(x) {
+                    return [x, d3.mean(V, function(v) { return kernel(x - v); })];
+                });
+            };
+        }
+        
+        function kernelEpanechnikov(k) {
+            return function(v) {
+                return Math.abs(v /= k) <= 1 ? 0.75 * (1 - v * v) / k : 0;
+            };
+        }
+        
+        function createDistribution(fieldName, values, container) {
+            const stats = calculateStats(values);
+            const skewnessInfo = getSkewnessType(parseFloat(stats.skewness));
+            
+            // Create card
+            const card = d3.select(container).append('div')
+                .attr('class', 'distribution-card');
+            
+            // Header
+            const header = card.append('div').attr('class', 'card-header');
+            header.append('div').attr('class', 'field-title').text(fieldName);
+            
+            // Stats summary
+            const statsSummary = header.append('div').attr('class', 'stats-summary');
+            statsSummary.append('div').attr('class', 'stat-item').html(`<div>Mean</div><div>${stats.mean}</div>`);
+            statsSummary.append('div').attr('class', 'stat-item').html(`<div>Median</div><div>${stats.median}</div>`);
+            statsSummary.append('div').attr('class', 'stat-item').html(`<div>Std Dev</div><div>${stats.stdDev}</div>`);
+            
+            // Skewness info
+            const skewnessDiv = header.append('div')
+                .attr('class', `skewness-info ${skewnessInfo.type}`)
+                .html(`${skewnessInfo.text}<br><small>${skewnessInfo.description} (${stats.skewness})</small>`);
+            
+            // Chart container
+            const chartContainer = card.append('div').attr('class', 'chart-container');
+            
+            // SVG setup
+            const margin = {top: 20, right: 30, bottom: 60, left: 60};
+            const width = 550 - margin.left - margin.right;
+            const height = 280 - margin.top - margin.bottom;
+            
+            const svg = chartContainer.append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom);
+                
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+            
+            // Scales
+            const xScale = d3.scaleLinear()
+                .domain(d3.extent(values))
+                .range([0, width]);
+                
+            const histogram = d3.histogram()
+                .domain(xScale.domain())
+                .thresholds(xScale.ticks(8));
+                
+            const bins = histogram(values);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, d3.max(bins, d => d.length)])
+                .range([height, 0]);
+            
+            // Draw histogram bars
+            g.selectAll('.histogram-bar')
+                .data(bins)
+                .enter().append('rect')
+                .attr('class', 'histogram-bar')
+                .attr('x', d => xScale(d.x0))
+                .attr('width', d => Math.max(0, xScale(d.x1) - xScale(d.x0) - 1))
+                .attr('y', d => yScale(d.length))
+                .attr('height', d => height - yScale(d.length))
+                .on('mouseover', function(event, d) {
+                    const tooltip = d3.select('#tooltip');
+                    tooltip.style('opacity', 1)
+                        .html(`Range: ${d.x0.toFixed(1)} - ${d.x1.toFixed(1)}<br>Count: ${d.length}`)
+                        .style('left', (event.pageX + 10) + 'px')
+                        .style('top', (event.pageY - 10) + 'px');
+                })
+                .on('mouseout', function() {
+                    d3.select('#tooltip').style('opacity', 0);
+                });
+            
+            // Kernel density estimation for smooth curve
+            const kde = kernelDensityEstimator(kernelEpanechnikov(7), xScale.ticks(100));
+            const density = kde(values);
+            
+            // Scale density for visualization
+            const maxDensity = d3.max(density, d => d[1]);
+            const maxCount = d3.max(bins, d => d.length);
+            const densityScale = maxCount / maxDensity * 0.8;
+            
+            const line = d3.line()
+                .x(d => xScale(d[0]))
+                .y(d => yScale(d[1] * densityScale))
+                .curve(d3.curveBasis);
+            
+            // Draw smooth distribution curve
+            g.append('path')
+                .datum(density)
+                .attr('class', 'distribution-curve')
+                .attr('d', line);
+            
+            // Mean and median lines
+            g.append('line')
+                .attr('class', 'mean-line')
+                .attr('x1', xScale(stats.mean))
+                .attr('x2', xScale(stats.mean))
+                .attr('y1', 0)
+                .attr('y2', height);
+                
+            g.append('line')
+                .attr('class', 'median-line')
+                .attr('x1', xScale(stats.median))
+                .attr('x2', xScale(stats.median))
+                .attr('y1', 0)
+                .attr('y2', height);
+            
+            // Axes
+            g.append('g')
+                .attr('class', 'axis')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(xScale));
+                
+            g.append('g')
+                .attr('class', 'axis')
+                .call(d3.axisLeft(yScale));
+            
+            // Axis labels
+            g.append('text')
+                .attr('class', 'axis-label')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', 0 - margin.left)
+                .attr('x', 0 - (height / 2))
+                .attr('dy', '1em')
+                .style('text-anchor', 'middle')
+                .text('Frequency');
+                
+            g.append('text')
+                .attr('class', 'axis-label')
+                .attr('transform', `translate(${width / 2}, ${height + margin.bottom - 10})`)
+                .style('text-anchor', 'middle')
+                .text(fieldName + ' Values');
+            
+            // Legend
+            const legend = g.append('g')
+                .attr('transform', `translate(${width - 120}, 20)`);
+                
+            legend.append('line')
+                .attr('x1', 0).attr('x2', 20)
+                .attr('y1', 0).attr('y2', 0)
+                .attr('class', 'mean-line');
+            legend.append('text')
+                .attr('x', 25).attr('y', 0)
+                .attr('dy', '0.35em')
+                .attr('class', 'legend')
+                .text('Mean');
+                
+            legend.append('line')
+                .attr('x1', 0).attr('x2', 20)
+                .attr('y1', 15).attr('y2', 15)
+                .attr('class', 'median-line');
+            legend.append('text')
+                .attr('x', 25).attr('y', 15)
+                .attr('dy', '0.35em')
+                .attr('class', 'legend')
+                .text('Median');
+        }
+        
+        // Create distributions for all fields
+        const container = document.getElementById('statsGrid');
+        
+        fields.forEach(field => {
+            const values = data.map(d => d[field]);
+            createDistribution(field, values, container);
+        });
+    </script>
+</body>
+</html>
